@@ -4,82 +4,78 @@ import java.util.List;//TIP To <b>Run</b> code, press <shortcut actionId="Run"/>
 public class Main {
     public static void main(String[] args) {
         class Article {
-            final String getArticle;
+            static String getArticle;
+
             Article(final String getArticle) {
-                this.getArticle = getArticle;
+                Article.getArticle = getArticle;
             }
         }
 
         interface Subscriber {
-            public void send(Article){};
+            public void send();
         }
 
         class OfflineSubscriber implements Subscriber {
             private final String address;
+
             public OfflineSubscriber(final String address) {
                 this.address = address;
             }
 
             @Override
-            public void send(){
-                System.out.println(article.getArticle+" была доставлена по адресу: "+address);
+            public void send() {
+                System.out.println(Article.getArticle + " была доставлена по адресу: " + address);
             }
         }
-        class WebSite implements Subscriber{
+
+        class WebSite implements Subscriber {
             private final String url;
+
             public WebSite(final String url) {
                 this.url = url;
             }
 
             @Override
-            public void send(){
-                System.out.println(article.getArticle+"опубликована на страничке:  "+address);
+            public void send() {
+                System.out.println(Article.getArticle + " опубликована на страничке:  " + url);
             }
-            // метод send интерфейса Subscriber должен выводить текст "{article.getArticle} опубликована на страничке: {address}"
         }
 
         class NewspaperPublisher {
-
             private final List<Article> articles;
-
-            List<Subscriber> subscriber = new List<>;
-            // для отправки статей подписчикам, вам необходимо хранить их в списке
-            // создайте пустой список подписчиков List<Subscriber>
+            List<Subscriber> subscriber = new ArrayList<>();
 
             public NewspaperPublisher(final List<Article> articles) {
                 this.articles = articles;
             }
 
-            public void subscribe(Subscriber){
-                if(List.contains(Subscriber)){
-                    subscriber.add(Subscriber);
-                }return;
+            public void subscribe(Subscriber subscriber) {
+                if (this.subscriber.contains(subscriber)) {
+                    return;
+                }
+                this.subscriber.add(subscriber);
             }
-            public void unsubscribe(Subscriber){
-                if(List.contains(Subscriber)){
-                    subscriber.remove(Subscriber);
-                }return;
-            }
-            public void startWork(){
-                Subscriber.send();
-            }
-            public void publishNewArticle(Article){
-                articles.add(Article);
-                Subscriber.send(Article);
-            }
-            // Создайте метод subscribe() принимающий на вход любой объект, реализующий интерфейс Subscriber.
-            // При вызове метода subscribe() новый подписчик должен добавляться в список подписчиков.
-            // В списке подписчиков не должно быть дубликатов! Вы можете проеверить, есть ли данный подписчик в списке методом List.contains().
 
-            // Создайте метод unsubscribe() принимающий на вход любой объект, реализующий интерфейс Subscriber.
-            // При вызове данного метода подписчик должен удаляться из списка подписчиков.
+            public void unsubscribe(Subscriber subscriber) {
+                if (this.subscriber.contains(subscriber)) {
+                    this.subscriber.remove(subscriber);
+                }
+                return;
+            }
 
-            // Создайте метод startWork().
-            // Метод должен отправлять все статьи, которые хранятся в данный момент в списке articles, всем подписчикам из списка.
-            // Для отправки используйте метод send() класса Subscriber.
+            public void startWork() {
+                for (Subscriber subscriber : this.subscriber) {
+                    subscriber.send();
+                }
+            }
 
-            // Создайте метод publishNewArticle(). Метод принимает на вход объект класса Article.
-            // Метод должен добавлять новую статью в список статей articles, а затем рассылать её всем подписчикам из списка.
+            public void publishNewArticle(Article articles) {
+                this.articles.add(articles);
+                for (Subscriber subscriber : this.subscriber) {
+                    subscriber.send();
+                }
+            }
         }
+    }
     }
 }
