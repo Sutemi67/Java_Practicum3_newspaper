@@ -11,7 +11,7 @@ public class Main {
             }
         }
         interface Subscriber {
-            public void send();
+            void send(Article article);
         }
         class OfflineSubscriber implements Subscriber {
             private final String address;
@@ -21,7 +21,7 @@ public class Main {
             }
 
             @Override
-            public void send() {
+            public void send(Article article) {
                 System.out.println(Article.getArticle + " была доставлена по адресу: " + address);
             }
         }
@@ -34,40 +34,42 @@ public class Main {
             }
 
             @Override
-            public void send() {
+            public void send(Article article) {
                 System.out.println(Article.getArticle + " опубликована на страничке:  " + url);
             }
         }
 
         class NewspaperPublisher {
             private final List<Article> articles;
-            final List<Subscriber> subscriber = new ArrayList<>();
+            final List<Subscriber> subscribers = new ArrayList<>();
 
             public NewspaperPublisher(final List<Article> articles) {
                 this.articles = articles;
             }
 
             public void subscribe(Subscriber subscriber) {
-                if (this.subscriber.contains(subscriber)) {
+                if (this.subscribers.contains(subscriber)) {
                     return;
                 }
-                this.subscriber.add(subscriber);
+                this.subscribers.add(subscriber);
             }
 
             public void unsubscribe(Subscriber subscriber) {
-                this.subscriber.remove(subscriber);
+                this.subscribers.remove(subscriber);
             }
 
             public void startWork() {
-                for (Subscriber subscriber : this.subscriber) {
-                    subscriber.send();
+                for (Article article : this.articles) {
+                    for (Subscriber subscriber : this.subscribers) {
+                        subscriber.send(article);
+                    }
                 }
             }
 
-            public void publishNewArticle(Article articles) {
-                this.articles.add(articles);
-                for (Subscriber subscriber : this.subscriber) {
-                    subscriber.send();
+            public void publishNewArticle(Article article) {
+                this.articles.add(article);
+                for (Subscriber subscriber : this.subscribers) {
+                    subscriber.send(article);
                 }
             }
         }
