@@ -12,7 +12,9 @@ public class Main {
         }
 
         interface Subscriber {
-            public void send();
+            void send();
+
+            public void send(Article article);
         }
 
         class OfflineSubscriber implements Subscriber {
@@ -25,6 +27,11 @@ public class Main {
             @Override
             public void send() {
                 System.out.println(Article.getArticle + " была доставлена по адресу: " + address);
+            }
+
+            @Override
+            public void send(Article article) {
+
             }
         }
 
@@ -39,11 +46,16 @@ public class Main {
             public void send() {
                 System.out.println(Article.getArticle + " опубликована на страничке:  " + url);
             }
+
+            @Override
+            public void send(Article article) {
+
+            }
         }
 
         class NewspaperPublisher {
             private final List<Article> articles;
-            List<Subscriber> subscriber = new ArrayList<>();
+            final List<Subscriber> subscriber = new ArrayList<>();
 
             public NewspaperPublisher(final List<Article> articles) {
                 this.articles = articles;
@@ -57,10 +69,7 @@ public class Main {
             }
 
             public void unsubscribe(Subscriber subscriber) {
-                if (this.subscriber.contains(subscriber)) {
-                    this.subscriber.remove(subscriber);
-                }
-                return;
+                this.subscriber.remove(subscriber);
             }
 
             public void startWork() {
