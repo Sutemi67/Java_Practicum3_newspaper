@@ -12,9 +12,7 @@ public class Main {
         }
 
         interface Subscriber {
-            void send();
-
-            public void send(Article article);
+            public void send();
         }
 
         class OfflineSubscriber implements Subscriber {
@@ -28,11 +26,6 @@ public class Main {
             public void send() {
                 System.out.println(Article.getArticle + " была доставлена по адресу: " + address);
             }
-
-            @Override
-            public void send(Article article) {
-
-            }
         }
 
         class WebSite implements Subscriber {
@@ -45,11 +38,6 @@ public class Main {
             @Override
             public void send() {
                 System.out.println(Article.getArticle + " опубликована на страничке:  " + url);
-            }
-
-            @Override
-            public void send(Article article) {
-
             }
         }
 
