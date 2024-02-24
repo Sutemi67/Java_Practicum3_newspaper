@@ -10,11 +10,9 @@ public class Main {
                 Article.getArticle = getArticle;
             }
         }
-
         interface Subscriber {
             public void send();
         }
-
         class OfflineSubscriber implements Subscriber {
             private final String address;
 
