@@ -10,11 +10,9 @@ public class Main {
                 Article.getArticle = getArticle;
             }
         }
-
         interface Subscriber {
             public void send();
         }
-
         class OfflineSubscriber implements Subscriber {
             private final String address;
 
@@ -43,7 +41,7 @@ public class Main {
 
         class NewspaperPublisher {
             private final List<Article> articles;
-            List<Subscriber> subscriber = new ArrayList<>();
+            final List<Subscriber> subscriber = new ArrayList<>();
 
             public NewspaperPublisher(final List<Article> articles) {
                 this.articles = articles;
@@ -57,10 +55,7 @@ public class Main {
             }
 
             public void unsubscribe(Subscriber subscriber) {
-                if (this.subscriber.contains(subscriber)) {
-                    this.subscriber.remove(subscriber);
-                }
-                return;
+                this.subscriber.remove(subscriber);
             }
 
             public void startWork() {
